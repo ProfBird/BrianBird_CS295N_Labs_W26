@@ -3,5 +3,6 @@
   <Folder Name="/Solution Items/">
     <File Path="../README.md" />
   </Folder>
+  <Project Path="CodeReviews.Tests/CodeReviews.Tests.csproj" />
   <Project Path="CodeReviews/CodeReviews.csproj" />
 </Solution>
