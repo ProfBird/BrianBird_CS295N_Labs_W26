@@ -136,15 +136,65 @@ public class ReadinessCheckerController : Controller
     /// <returns>List of recommendations</returns>
     public List<string> GenerateRecommendations(ReadinessChecklistViewModel checklist)
     {
-        // TODO: Implement recommendation logic
         var recommendations = new List<string>();
 
+        // Critical items
         if (!checklist.ProjectBuilds)
         {
             recommendations.Add("Fix all build errors before requesting a review.");
         }
+        if (!checklist.AppRuns)
+        {
+            recommendations.Add("Ensure your application runs without crashing on startup.");
+        }
+        if (!checklist.NoRuntimeErrors)
+        {
+            recommendations.Add("Test all main pages and features to ensure they work without runtime errors.");
+        }
 
-        // TODO: Add remaining recommendation logic
+        // Important items
+        if (!checklist.CodeIsClean)
+        {
+            recommendations.Add("Remove debug statements, commented-out code, and unused variables.");
+        }
+        if (!checklist.FollowsNamingConventions)
+        {
+            recommendations.Add("Follow C# naming conventions: PascalCase for classes/methods, camelCase for local variables.");
+        }
+        if (!checklist.HasErrorHandling)
+        {
+            recommendations.Add("Add try-catch blocks and validation for user input and external operations.");
+        }
+
+        // Documentation
+        if (!checklist.HasReadme)
+        {
+            recommendations.Add("Create a README.md with project description, features, and setup instructions.");
+        }
+        if (!checklist.HasComments)
+        {
+            recommendations.Add("Add comments to explain complex logic and algorithm choices.");
+        }
+
+        // Testing
+        if (!checklist.HasTests)
+        {
+            recommendations.Add("Consider adding unit tests for business logic and controller methods.");
+        }
+        if (checklist.HasTests && !checklist.TestsPass)
+        {
+            recommendations.Add("Fix failing tests before requesting a review.");
+        }
+
+        // Repository
+        if (!checklist.CommitsHaveMessages)
+        {
+            recommendations.Add("Write clear, descriptive commit messages that explain what and why.");
+        }
+        if (!checklist.NoSensitiveData)
+        {
+            recommendations.Add("Remove passwords, API keys, and connection strings from your repository.");
+        }
 
         return recommendations;
     }
