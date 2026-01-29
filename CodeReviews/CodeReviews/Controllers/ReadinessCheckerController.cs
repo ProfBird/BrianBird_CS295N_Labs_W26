@@ -34,7 +34,6 @@ public class ReadinessCheckerController : Controller
     /// <returns>ReadinessResultViewModel with score and status</returns>
     public ReadinessResultViewModel EvaluateReadiness(ReadinessChecklistViewModel checklist)
     {
-        // TODO: Implement evaluation logic
         var score = CalculateScore(checklist);
         var maxScore = GetMaxScore();
         var status = DetermineStatus(score, maxScore);
@@ -92,8 +91,8 @@ public class ReadinessCheckerController : Controller
     /// <returns>Maximum score</returns>
     public int GetMaxScore()
     {
-        // TODO: Calculate based on all weighted criteria
-        return 100; // Placeholder
+        // 30 (critical) + 24 (important) + 14 (docs) + 16 (testing) + 16 (repo) = 100
+        return 100;
     }
 
     /// <summary>
@@ -104,7 +103,6 @@ public class ReadinessCheckerController : Controller
     /// <returns>Status: "Ready", "Almost Ready", or "Not Ready"</returns>
     public string DetermineStatus(int score, int maxScore)
     {
-        // TODO: Implement status determination logic
         double percentage = (double)score / maxScore * 100;
 
         if (percentage >= 80) return "Ready";
@@ -119,7 +117,6 @@ public class ReadinessCheckerController : Controller
     /// <returns>User-friendly message</returns>
     public string GenerateMessage(string status)
     {
-        // TODO: Implement message generation
         return status switch
         {
             "Ready" => "Great! Your code is ready for review.",
