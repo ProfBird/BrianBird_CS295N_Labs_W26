@@ -1,3 +1,7 @@
 <Solution>
+  <Folder Name="/Docs/" />
+  <Folder Name="/Solution Items/">
+    <File Path="../README.md" />
+  </Folder>
   <Project Path="CodeReviews/CodeReviews.csproj" />
 </Solution>
