@@ -59,18 +59,29 @@ public class ReadinessCheckerController : Controller
     /// <returns>Total score</returns>
     public int CalculateScore(ReadinessChecklistViewModel checklist)
     {
-        // TODO: Implement scoring logic with weights
-        // Critical items (10 points each): Build, Run, No errors
-        // Important items (5 points each): Clean code, naming, error handling
-        // Nice-to-have (3 points each): Tests, comments, etc.
         int score = 0;
 
-        // Critical criteria
+        // Critical criteria (10 points each = 30 points total)
         if (checklist.ProjectBuilds) score += 10;
         if (checklist.AppRuns) score += 10;
         if (checklist.NoRuntimeErrors) score += 10;
 
-        // TODO: Add remaining scoring logic
+        // Important criteria (8 points each = 24 points total)
+        if (checklist.CodeIsClean) score += 8;
+        if (checklist.FollowsNamingConventions) score += 8;
+        if (checklist.HasErrorHandling) score += 8;
+
+        // Documentation (7 points each = 14 points total)
+        if (checklist.HasReadme) score += 7;
+        if (checklist.HasComments) score += 7;
+
+        // Testing (8 points each = 16 points total)
+        if (checklist.HasTests) score += 8;
+        if (checklist.TestsPass) score += 8;
+
+        // Repository (8 points each = 16 points total)
+        if (checklist.CommitsHaveMessages) score += 8;
+        if (checklist.NoSensitiveData) score += 8;
 
         return score;
     }
