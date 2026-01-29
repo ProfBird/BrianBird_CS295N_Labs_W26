@@ -1,19 +1,25 @@
 using Xunit;
 using CodeReviews.Controllers;
 using CodeReviews.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.FileProviders;
+using System.Text.Json;
 
 namespace CodeReviews.Tests;
 
 /// <summary>
 /// Unit tests for ReadinessCheckerController helper methods
 /// </summary>
-public class ReadinessCheckerControllerTests
+public class ReadinessCheckControllerTests
 {
-    private readonly ReadinessCheckerController _controller;
+    private readonly ReadinessCheckController _controller;
+    private readonly List<ReadinessItem> _items;
 
-    public ReadinessCheckerControllerTests()
+    public ReadinessCheckControllerTests()
     {
-        _controller = new ReadinessCheckerController();
+        var contentRoot = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../CodeReviews"));
+        _controller = new ReadinessCheckController(new TestWebHostEnvironment(contentRoot));
+        _items = LoadItems(contentRoot);
     }
 
     #region CalculateScore Tests
@@ -22,12 +28,12 @@ public class ReadinessCheckerControllerTests
     public void CalculateScore_AllCriticalItemsChecked_ReturnsExpectedScore()
     {
         // Arrange
-        var checklist = new ReadinessChecklistViewModel
+        var checklist = BuildChecklist(new Dictionary<string, bool>
         {
-            ProjectBuilds = true,
-            AppRuns = true,
-            NoRuntimeErrors = true
-        };
+            ["ProjectBuilds"] = true,
+            ["AppRuns"] = true,
+            ["NoRuntimeErrors"] = true
+        });
 
         // Act
         var score = _controller.CalculateScore(checklist);
@@ -40,12 +46,12 @@ public class ReadinessCheckerControllerTests
     public void CalculateScore_NoCriticalItemsChecked_ReturnsLowScore()
     {
         // Arrange
-        var checklist = new ReadinessChecklistViewModel
+        var checklist = BuildChecklist(new Dictionary<string, bool>
         {
-            ProjectBuilds = false,
-            AppRuns = false,
-            NoRuntimeErrors = false
-        };
+            ["ProjectBuilds"] = false,
+            ["AppRuns"] = false,
+            ["NoRuntimeErrors"] = false
+        });
 
         // Act
         var score = _controller.CalculateScore(checklist);
@@ -58,25 +64,11 @@ public class ReadinessCheckerControllerTests
     public void CalculateScore_AllItemsChecked_ReturnsMaxScore()
     {
         // Arrange
-        var checklist = new ReadinessChecklistViewModel
-        {
-            ProjectBuilds = true,
-            AppRuns = true,
-            NoRuntimeErrors = true,
-            CodeIsClean = true,
-            FollowsNamingConventions = true,
-            HasErrorHandling = true,
-            HasReadme = true,
-            HasComments = true,
-            HasTests = true,
-            TestsPass = true,
-            CommitsHaveMessages = true,
-            NoSensitiveData = true
-        };
+        var checklist = BuildChecklist(_items.ToDictionary(item => item.Title, _ => true));
 
         // Act
         var score = _controller.CalculateScore(checklist);
-        var maxScore = _controller.GetMaxScore();
+        var maxScore = _controller.GetMaxScore(checklist);
 
         // Assert
         Assert.Equal(maxScore, score);
@@ -182,10 +174,10 @@ public class ReadinessCheckerControllerTests
     public void GenerateRecommendations_ProjectDoesNotBuild_IncludesBuildRecommendation()
     {
         // Arrange
-        var checklist = new ReadinessChecklistViewModel
+        var checklist = BuildChecklist(new Dictionary<string, bool>
         {
-            ProjectBuilds = false
-        };
+            ["ProjectBuilds"] = false
+        });
 
         // Act
         var recommendations = _controller.GenerateRecommendations(checklist);
@@ -199,21 +191,7 @@ public class ReadinessCheckerControllerTests
     public void GenerateRecommendations_AllItemsChecked_ReturnsEmptyList()
     {
         // Arrange
-        var checklist = new ReadinessChecklistViewModel
-        {
-            ProjectBuilds = true,
-            AppRuns = true,
-            NoRuntimeErrors = true,
-            CodeIsClean = true,
-            FollowsNamingConventions = true,
-            HasErrorHandling = true,
-            HasReadme = true,
-            HasComments = true,
-            HasTests = true,
-            TestsPass = true,
-            CommitsHaveMessages = true,
-            NoSensitiveData = true
-        };
+        var checklist = BuildChecklist(_items.ToDictionary(item => item.Title, _ => true));
 
         // Act
         var recommendations = _controller.GenerateRecommendations(checklist);
@@ -226,12 +204,12 @@ public class ReadinessCheckerControllerTests
     public void GenerateRecommendations_MultipleMissingItems_ReturnsMultipleRecommendations()
     {
         // Arrange
-        var checklist = new ReadinessChecklistViewModel
+        var checklist = BuildChecklist(new Dictionary<string, bool>
         {
-            ProjectBuilds = false,
-            HasReadme = false,
-            HasTests = false
-        };
+            ["ProjectBuilds"] = false,
+            ["HasReadme"] = false,
+            ["HasTests"] = false
+        });
 
         // Act
         var recommendations = _controller.GenerateRecommendations(checklist);
@@ -248,12 +226,12 @@ public class ReadinessCheckerControllerTests
     public void EvaluateReadiness_ValidChecklist_ReturnsResultWithAllProperties()
     {
         // Arrange
-        var checklist = new ReadinessChecklistViewModel
+        var checklist = BuildChecklist(new Dictionary<string, bool>
         {
-            ProjectBuilds = true,
-            AppRuns = true,
-            NoRuntimeErrors = true
-        };
+            ["ProjectBuilds"] = true,
+            ["AppRuns"] = true,
+            ["NoRuntimeErrors"] = true
+        });
 
         // Act
         var result = _controller.EvaluateReadiness(checklist);
@@ -272,21 +250,7 @@ public class ReadinessCheckerControllerTests
     public void EvaluateReadiness_PerfectChecklist_ReturnsReadyStatus()
     {
         // Arrange
-        var checklist = new ReadinessChecklistViewModel
-        {
-            ProjectBuilds = true,
-            AppRuns = true,
-            NoRuntimeErrors = true,
-            CodeIsClean = true,
-            FollowsNamingConventions = true,
-            HasErrorHandling = true,
-            HasReadme = true,
-            HasComments = true,
-            HasTests = true,
-            TestsPass = true,
-            CommitsHaveMessages = true,
-            NoSensitiveData = true
-        };
+        var checklist = BuildChecklist(_items.ToDictionary(item => item.Title, _ => true));
 
         // Act
         var result = _controller.EvaluateReadiness(checklist);
@@ -304,7 +268,7 @@ public class ReadinessCheckerControllerTests
     public void GetMaxScore_ReturnsPositiveValue()
     {
         // Act
-        var maxScore = _controller.GetMaxScore();
+        var maxScore = _controller.GetMaxScore(BuildChecklist());
 
         // Assert
         Assert.True(maxScore > 0);
@@ -314,12 +278,50 @@ public class ReadinessCheckerControllerTests
     public void GetMaxScore_ConsistentValue()
     {
         // Act
-        var maxScore1 = _controller.GetMaxScore();
-        var maxScore2 = _controller.GetMaxScore();
+        var checklist = BuildChecklist();
+        var maxScore1 = _controller.GetMaxScore(checklist);
+        var maxScore2 = _controller.GetMaxScore(checklist);
 
         // Assert
         Assert.Equal(maxScore1, maxScore2);
     }
 
     #endregion
+
+    private ReadinessCheckVM BuildChecklist(Dictionary<string, bool>? selections = null)
+    {
+        var selectionMap = selections ?? new Dictionary<string, bool>();
+
+        return new ReadinessCheckVM
+        {
+            Items = _items,
+            Selections = _items.Select(item => new ReadinessSelection
+            {
+                Title = item.Title,
+                IsChecked = selectionMap.TryGetValue(item.Title, out var isChecked) && isChecked
+            }).ToList()
+        };
+    }
+
+    private static List<ReadinessItem> LoadItems(string contentRoot)
+    {
+        var path = Path.Combine(contentRoot, "Data", "ReadinessChecklist.json");
+        var json = File.ReadAllText(path);
+        return JsonSerializer.Deserialize<List<ReadinessItem>>(json, ReadinessJsonOptions.Options) ?? new List<ReadinessItem>();
+    }
+
+    private sealed class TestWebHostEnvironment : IWebHostEnvironment
+    {
+        public TestWebHostEnvironment(string contentRootPath)
+        {
+            ContentRootPath = contentRootPath;
+        }
+
+        public string EnvironmentName { get; set; } = string.Empty;
+        public string ApplicationName { get; set; } = string.Empty;
+        public string WebRootPath { get; set; } = string.Empty;
+        public IFileProvider WebRootFileProvider { get; set; } = new NullFileProvider();
+        public string ContentRootPath { get; set; }
+        public IFileProvider ContentRootFileProvider { get; set; } = new NullFileProvider();
+    }
 }

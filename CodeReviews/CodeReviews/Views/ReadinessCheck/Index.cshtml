@@ -1,0 +1,51 @@
+@model CodeReviews.Models.ReadinessCheckVM
+
+@{
+    ViewData["Title"] = "Code Readiness Checker";
+}
+
+<div class="container mt-4">
+    <h2>Code Review Readiness Checker</h2>
+    <p class="lead">Complete this checklist to see if your code is ready for review.</p>
+
+    <form asp-action="Index" method="post">
+        @foreach (var category in Model.Categories)
+        {
+            var headerClass = category.Id switch
+            {
+                1 => "bg-danger text-white",
+                2 => "bg-warning",
+                3 => "bg-info text-white",
+                4 => "bg-success text-white",
+                5 => "bg-secondary text-white",
+                _ => string.Empty
+            };
+            <div class="card mb-3">
+                <div class="card-header @headerClass">
+                    <h5>@category.Name</h5>
+                </div>
+                <div class="card-body">
+                    @for (var i = 0; i < Model.Items.Count; i++)
+                    {
+                        var item = Model.Items[i];
+                        if (item.Category != category.Id)
+                        {
+                            continue;
+                        }
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" asp-for="Selections[i].IsChecked" />
+                            <input type="hidden" asp-for="Selections[i].Title" />
+                            <label class="form-check-label" for="@Html.IdFor(model => model.Selections[i].IsChecked)">
+                                @item.Text
+                            </label>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary btn-lg">Check My Readiness</button>
+        </div>
+    </form>
+</div>

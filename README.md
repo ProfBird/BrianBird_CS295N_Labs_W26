@@ -28,3 +28,7 @@ requirements for the app:
 - Students can upload links to their repos and ask for a review
   - Students can enter a date by which they will be ready to upload their link (if it's past the deadline).
   - The app will match students who are ready giving priority to lab partners
+
+## TODO
+
+- Consider adding a service (registered with DI) to load the readiness checklist JSON instead of reading it in the controller, to avoid file I/O on every request and keep controllers thinner.
