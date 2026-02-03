@@ -1,3 +1,6 @@
 <Solution>
+  <Folder Name="/docs/">
+    <File Path="docs/MySQL-Identity-Repository-Setup.md" />
+  </Folder>
   <Project Path="CodeReviews/CodeReviews.csproj" />
 </Solution>
