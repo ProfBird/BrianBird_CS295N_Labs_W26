@@ -1,5 +1,7 @@
 <Solution>
-  <Folder Name="/Docs/" />
+  <Folder Name="/Docs/">
+    <File Path="Docs/MySQL-Identity-Repository-Setup.md" />
+  </Folder>
   <Folder Name="/Solution Items/">
     <File Path="../README.md" />
   </Folder>
