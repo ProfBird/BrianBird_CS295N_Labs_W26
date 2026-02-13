@@ -6,4 +6,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="READINESS_CHECKER_IMPLEMENTATION.md" />
+    <None Remove="TDD_IMPLEMENTATION_SUMMARY.md" />
+  </ItemGroup>
+
 </Project>

@@ -1,5 +1,7 @@
 <Solution>
   <Folder Name="/Docs/">
+    <File Path="CodeReviews/READINESS_CHECKER_IMPLEMENTATION.md" />
+    <File Path="CodeReviews/TDD_IMPLEMENTATION_SUMMARY.md" />
     <File Path="Docs/MySQL-Identity-Repository-Setup.md" />
   </Folder>
   <Folder Name="/Solution Items/">
