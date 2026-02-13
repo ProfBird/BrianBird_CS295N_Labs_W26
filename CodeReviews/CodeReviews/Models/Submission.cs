@@ -3,7 +3,7 @@ namespace CodeReviews.Models
     public class Submission
     {
         public int SubmissionId { get; set; }
-        public int AssignmentId { get; set; }
+        public Assignment Assignment { get; set; }
         public string Version { get; set; } // Ex: A, B, C
         public AppUser Student { get; set; }
         public DateTime SubmissionDate { get; set; }

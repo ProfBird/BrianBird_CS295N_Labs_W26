@@ -3,7 +3,7 @@ namespace CodeReviews.Models;
 public class Section  // Course Section
 {
     public int SectionId { get; set; }
-    public Course CourseId { get; set; }
+    public Course Course { get; set; }
     public int SectionNumber { get; set; }  // CRN
     public string Day { get; set; } // Ex: MW or TuTh
     public string StartTime { get; set; } // Ex: 10:00 AM
