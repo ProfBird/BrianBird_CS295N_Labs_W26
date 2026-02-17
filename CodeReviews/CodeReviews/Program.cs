@@ -1,3 +1,4 @@
+using CodeReviews;
 using CodeReviews.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,5 +36,11 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider
+                         .GetRequiredService<AppDbContext>();
+    SeedData.Seed(dbContext);
+}
 
 app.Run();
