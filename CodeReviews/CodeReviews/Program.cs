@@ -1,7 +1,17 @@
+using CodeReviews.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+var baseConnectionString = builder.Configuration.GetConnectionString("MySqlConnection");
+var user = builder.Configuration["DbUser"];
+var password = builder.Configuration["DbPassword"];
+var connectionString = $"{baseConnectionString}userid={user};password={password};";
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
 var app = builder.Build();
 
