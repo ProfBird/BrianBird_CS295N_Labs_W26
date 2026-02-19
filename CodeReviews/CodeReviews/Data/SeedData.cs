@@ -5,26 +5,21 @@ namespace CodeReviews.Data
     public class SeedData
     {
         public static void Seed(AppDbContext context)
-
         {
-
             if (!context.Reviews.Any())  // this is to prevent adding duplicate data
             {
-
-                // Create AppUser objects
-
+                // Create User objects
                 AppUser reviewer1 = new AppUser { Name = "Ada Lovelace" };
-
                 AppUser reviewer2 = new AppUser { Name = "Charles Babage" };
-
-                // Queue up AppUser objects to be saved to the DB
+                // Queue up user objects to be saved to the DB
                 context.AppUsers.Add(reviewer1);
                 context.AppUsers.Add(reviewer2);
-                context.SaveChanges();  // Saving adds AppUserId to AppUser objects
+                context.SaveChanges();  // Saving adds Id to User objects
 
-                Submission submission1 = new Submission
+                // Create dummy submission
+                Submission dummySubmission = new Submission
                 {
-                    CodeUrl = "",
+                    CodeUrl = "https://github.com/student/assignment-submission",
                     Version = "A",
                     SubmissionDate = DateTime.Now,
                     Student = new AppUser { Name = "Dummy Student" },
@@ -52,37 +47,34 @@ namespace CodeReviews.Data
                         }
                     }
                 };
+                context.Submissions.Add(dummySubmission);
+                context.SaveChanges();  // Save dummy submission to get its Id
 
-                context.Submissions.Add(submission1);
-                context.SaveChanges();
-
-                // Create Review objects
-                Review review1 = new Review
+                Review review = new Review
                 {
                     Reviewer = reviewer1,
-                    Submission = submission1,
-                    ReviewDate = DateTime.Now.AddDays(-2),
+                    ReviewDate = new DateOnly(2026, 2, 10),
                     Comments = "Great code structure and clear variable names. " +
                     "Consider adding more comments to explain the algorithm logic. " +
                     "Overall well done!",
-                    ReviewUrl = "https://github.com/example/pull/123#discussion_r12345"
+                    ReviewUrl = "https://github.com/example/pull/123#discussion_r12345",
+                    Submission = dummySubmission
                 };
-                context.Reviews.Add(review1);
+                context.Reviews.Add(review);  // queues up a review to be added to the DB
 
                 Review review2 = new Review
                 {
                     Reviewer = reviewer2,
-                    Submission = submission1,
-                    ReviewDate = DateTime.Now.AddDays(-1),
+                    ReviewDate = new DateOnly(2025, 6, 3),
                     Comments = "Code works correctly and handles edge cases well. " +
                     "Nice use of helper functions to break down the problem. " +
                     "Minor: could optimize the loop in line 42.",
-                    ReviewUrl = "https://github.com/example/pull/124#discussion_r12346"
+                    ReviewUrl = "https://github.com/example/pull/124#discussion_r12346",
+                    Submission = dummySubmission
                 };
-                context.Reviews.Add(review2);
+                context.Reviews.Add(review2);  // queues up the second review to be added to the DB
 
                 context.SaveChanges();  // Save all reviews to the database
-
             }
         }
     }

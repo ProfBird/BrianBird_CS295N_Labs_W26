@@ -1,4 +1,3 @@
-using CodeReviews;
 using CodeReviews.Data;
 using Microsoft.EntityFrameworkCore;
 
