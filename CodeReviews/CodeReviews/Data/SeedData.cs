@@ -1,7 +1,6 @@
-﻿using CodeReviews.Data;
-using CodeReviews.Models;
+﻿using CodeReviews.Models;
 
-namespace CodeReviews
+namespace CodeReviews.Data
 {
     public class SeedData
     {
