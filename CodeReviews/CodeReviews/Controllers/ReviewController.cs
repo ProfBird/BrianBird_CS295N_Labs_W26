@@ -30,6 +30,18 @@ namespace CodeReviews.Controllers
             return View(reviews);
         }
 
+        public IActionResult Filter(string reviewer, string date)
+        {
+            var reviews = context.Reviews
+                .Include(r => r.Reviewer)
+                .Include(r => r.Submission)
+                .ToList()
+                .Where(r => reviewer == null || r.Reviewer.Name == reviewer)
+                .Where(r => date == null || r.ReviewDate == DateOnly.Parse(date))
+                .ToList();
+            return View("List", reviews);
+        }
+
         [HttpGet]
         public IActionResult Review()
         {
@@ -39,7 +51,7 @@ namespace CodeReviews.Controllers
         [HttpPost]
         public IActionResult Review(Review review)
         {
-            review.ReviewDate = DateTime.Now;
+            review.ReviewDate = DateOnly.FromDateTime(DateTime.Now);
 
             // Use the seeded dummy submission
             var dummySubmission = context.Submissions.FirstOrDefault();

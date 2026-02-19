@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CodeReviews.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260213005530_Initial")]
+    [Migration("20260219211852_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -113,8 +113,8 @@ namespace CodeReviews.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("ReviewDate")
-                        .HasColumnType("datetime(6)");
+                    b.Property<DateOnly>("ReviewDate")
+                        .HasColumnType("date");
 
                     b.Property<string>("ReviewUrl")
                         .HasColumnType("longtext");
@@ -210,7 +210,7 @@ namespace CodeReviews.Migrations
 
                     b.HasIndex("StudentAppUserId");
 
-                    b.ToTable("Submission");
+                    b.ToTable("Submissions");
                 });
 
             modelBuilder.Entity("CodeReviews.Models.Assignment", b =>

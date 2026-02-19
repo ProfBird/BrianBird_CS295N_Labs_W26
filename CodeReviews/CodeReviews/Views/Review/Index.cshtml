@@ -2,8 +2,19 @@
     ViewData["Title"] = "Reviews";
 }
 <div class="text-center">
-<h1>Reviews</h1>
-<p>View and submit code reviews for assignments.</p>
-<a asp-action="List">See Reviews</a> |
-<a asp-action="Review">Submit a Review</a>
-</div></div>
+    <h1>Code Reviews</h1>
+    <p>View and submit code reviews for assignments.
+    <a asp-action="List">See Reviews</a> |
+    <a asp-action="Review">Submit a Review</a>
+    </p>
+
+    <h2>Filter Code Reviews</h2>
+
+    <form method="get" action="/Review/Filter">
+        <label name="reviewer">Reviewer</label><br />
+        <input name="reviewer" /><br />
+        <label name="date">Date</label><br />
+        <input name="date" /><br />
+        <button type="submit">Submit</button>
+    </form>
+</div>

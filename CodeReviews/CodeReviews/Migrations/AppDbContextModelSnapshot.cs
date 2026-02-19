@@ -110,8 +110,8 @@ namespace CodeReviews.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("ReviewDate")
-                        .HasColumnType("datetime(6)");
+                    b.Property<DateOnly>("ReviewDate")
+                        .HasColumnType("date");
 
                     b.Property<string>("ReviewUrl")
                         .HasColumnType("longtext");

@@ -54,7 +54,7 @@ namespace CodeReviews
                 Review review = new Review
                 {
                     Reviewer = reviewer1,
-                    ReviewDate = DateTime.Now.AddDays(-2),
+                    ReviewDate = new DateOnly(2026, 2, 10),
                     Comments = "Great code structure and clear variable names. " +
                     "Consider adding more comments to explain the algorithm logic. " +
                     "Overall well done!",
@@ -66,7 +66,7 @@ namespace CodeReviews
                 Review review2 = new Review
                 {
                     Reviewer = reviewer2,
-                    ReviewDate = DateTime.Now.AddDays(-1),
+                    ReviewDate = new DateOnly(2025, 6, 3),
                     Comments = "Code works correctly and handles edge cases well. " +
                     "Nice use of helper functions to break down the problem. " +
                     "Minor: could optimize the loop in line 42.",

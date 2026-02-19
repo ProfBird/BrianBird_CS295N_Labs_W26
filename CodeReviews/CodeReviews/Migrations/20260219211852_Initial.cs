@@ -114,7 +114,7 @@ namespace CodeReviews.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Submission",
+                name: "Submissions",
                 columns: table => new
                 {
                     SubmissionId = table.Column<int>(type: "int", nullable: false)
@@ -129,15 +129,15 @@ namespace CodeReviews.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Submission", x => x.SubmissionId);
+                    table.PrimaryKey("PK_Submissions", x => x.SubmissionId);
                     table.ForeignKey(
-                        name: "FK_Submission_AppUsers_StudentAppUserId",
+                        name: "FK_Submissions_AppUsers_StudentAppUserId",
                         column: x => x.StudentAppUserId,
                         principalTable: "AppUsers",
                         principalColumn: "AppUserId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Submission_Assignments_AssignmentId",
+                        name: "FK_Submissions_Assignments_AssignmentId",
                         column: x => x.AssignmentId,
                         principalTable: "Assignments",
                         principalColumn: "AssignmentId",
@@ -153,7 +153,7 @@ namespace CodeReviews.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     SubmissionId = table.Column<int>(type: "int", nullable: false),
                     ReviewerAppUserId = table.Column<int>(type: "int", nullable: false),
-                    ReviewDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    ReviewDate = table.Column<DateOnly>(type: "date", nullable: false),
                     Comments = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ReviewUrl = table.Column<string>(type: "longtext", nullable: true)
@@ -169,9 +169,9 @@ namespace CodeReviews.Migrations
                         principalColumn: "AppUserId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Reviews_Submission_SubmissionId",
+                        name: "FK_Reviews_Submissions_SubmissionId",
                         column: x => x.SubmissionId,
-                        principalTable: "Submission",
+                        principalTable: "Submissions",
                         principalColumn: "SubmissionId",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -203,13 +203,13 @@ namespace CodeReviews.Migrations
                 column: "InstructorAppUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Submission_AssignmentId",
-                table: "Submission",
+                name: "IX_Submissions_AssignmentId",
+                table: "Submissions",
                 column: "AssignmentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Submission_StudentAppUserId",
-                table: "Submission",
+                name: "IX_Submissions_StudentAppUserId",
+                table: "Submissions",
                 column: "StudentAppUserId");
         }
 
@@ -220,7 +220,7 @@ namespace CodeReviews.Migrations
                 name: "Reviews");
 
             migrationBuilder.DropTable(
-                name: "Submission");
+                name: "Submissions");
 
             migrationBuilder.DropTable(
                 name: "Assignments");
