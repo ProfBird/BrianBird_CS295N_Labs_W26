@@ -1,3 +1,4 @@
+#define SQLITE  // To use SQLite, change #undef to #define. MySQL is the default.
 using CodeReviews.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -5,6 +6,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+#if SQLITE
+var connectionString = builder.Configuration.GetConnectionString("SqliteConnection");
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite(connectionString));
+#else
 var baseConnectionString = builder.Configuration.GetConnectionString("MySqlConnection");
 var user = builder.Configuration["DbUser"];
 var password = builder.Configuration["DbPassword"];
@@ -12,6 +19,7 @@ var connectionString = $"{baseConnectionString}userid={user};password={password}
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+#endif
 
 var app = builder.Build();
 
