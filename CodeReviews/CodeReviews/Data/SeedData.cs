@@ -74,7 +74,7 @@ namespace CodeReviews.Data
                 // Create Assignment objects
                 Assignment assignment1 = new Assignment
                 {
-                    AssignmentName = "Lab01-Variables",
+                    AssignmentName = "Lab01 Variables",
                     DraftDueDate = new DateOnly(2026, 1, 20),
                     ReviewDueDate = new DateOnly(2026, 1, 27),
                     FinalDueDate = new DateOnly(2026, 2, 3),
@@ -82,7 +82,7 @@ namespace CodeReviews.Data
                 };
                 Assignment assignment2 = new Assignment
                 {
-                    AssignmentName = "Lab02-Branching",
+                    AssignmentName = "Lab02 Branching",
                     DraftDueDate = new DateOnly(2026, 2, 3),
                     ReviewDueDate = new DateOnly(2026, 2, 10),
                     FinalDueDate = new DateOnly(2026, 2, 17),
@@ -90,7 +90,7 @@ namespace CodeReviews.Data
                 };
                 Assignment assignment3 = new Assignment
                 {
-                    AssignmentName = "Lab03-MVC",
+                    AssignmentName = "Lab03 MVC",
                     DraftDueDate = new DateOnly(2026, 2, 10),
                     ReviewDueDate = new DateOnly(2026, 2, 17),
                     FinalDueDate = new DateOnly(2026, 2, 24),
