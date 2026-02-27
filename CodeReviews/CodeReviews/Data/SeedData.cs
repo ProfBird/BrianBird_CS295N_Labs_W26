@@ -11,68 +11,149 @@ namespace CodeReviews.Data
                 // Create User objects
                 AppUser reviewer1 = new AppUser { Name = "Ada Lovelace" };
                 AppUser reviewer2 = new AppUser { Name = "Charles Babage" };
+                AppUser student1 = new AppUser { Name = "Grace Hopper" };
+                AppUser student2 = new AppUser { Name = "Alan Turing" };
+                AppUser student3 = new AppUser { Name = "Margaret Hamilton" };
+                AppUser instructor1 = new AppUser { Name = "Donald Knuth" };
+                AppUser instructor2 = new AppUser { Name = "Barbara Liskov" };
+                
                 // Queue up user objects to be saved to the DB
                 context.AppUsers.Add(reviewer1);
                 context.AppUsers.Add(reviewer2);
+                context.AppUsers.Add(student1);
+                context.AppUsers.Add(student2);
+                context.AppUsers.Add(student3);
+                context.AppUsers.Add(instructor1);
+                context.AppUsers.Add(instructor2);
                 context.SaveChanges();  // Saving adds Id to User objects
 
-                // Create dummy submission
-                Submission dummySubmission = new Submission
+                // Create Course objects
+                Course course1 = new Course
                 {
-                    CodeUrl = "https://github.com/student/assignment-submission",
-                    Version = "A",
-                    SubmissionDate = DateTime.Now,
-                    Student = new AppUser { Name = "Dummy Student" },
-                    Assignment = new Assignment
-                    {
-                        AssignmentName = "Dummy Assignment",
-                        DraftDueDate = DateOnly.FromDateTime(DateTime.Now),
-                        ReviewDueDate = DateOnly.FromDateTime(DateTime.Now),
-                        FinalDueDate = DateOnly.FromDateTime(DateTime.Now),
-                        ClassSection = new Section
-                        {
-                            SectionNumber = 0,
-                            Day = "TBD",
-                            StartTime = "TBD",
-                            Modality = "TBD",
-                            Term = "TBD",
-                            Year = DateTime.Now.Year,
-                            Course = new Course
-                            {
-                                CoursePrefix = "CS",
-                                CourseNumber = "000",
-                                CourseName = "Dummy Course"
-                            },
-                            Instructor = new AppUser { Name = "Dummy Instructor" }
-                        }
-                    }
+                    CoursePrefix = "CS",
+                    CourseNumber = "161",
+                    CourseName = "Introduction to Computer Science"
                 };
-                context.Submissions.Add(dummySubmission);
-                context.SaveChanges();  // Save dummy submission to get its Id
+                Course course2 = new Course
+                {
+                    CoursePrefix = "CS",
+                    CourseNumber = "295N",
+                    CourseName = "Web Development"
+                };
+                context.Courses.Add(course1);
+                context.Courses.Add(course2);
+                context.SaveChanges();
 
-                Review review = new Review
+                // Create Section objects
+                Section section1 = new Section
+                {
+                    SectionNumber = 12345,
+                    Day = "MW",
+                    StartTime = "10:00 AM",
+                    Modality = "Hybrid",
+                    Term = "Winter",
+                    Year = 2026,
+                    Course = course1,
+                    Instructor = instructor1
+                };
+                Section section2 = new Section
+                {
+                    SectionNumber = 23456,
+                    Day = "TuTh",
+                    StartTime = "2:00 PM",
+                    Modality = "Online",
+                    Term = "Winter",
+                    Year = 2026,
+                    Course = course2,
+                    Instructor = instructor2
+                };
+                context.Sections.Add(section1);
+                context.Sections.Add(section2);
+                context.SaveChanges();
+
+                // Create Assignment objects
+                Assignment assignment1 = new Assignment
+                {
+                    AssignmentName = "Lab01-Variables",
+                    DraftDueDate = new DateOnly(2026, 1, 20),
+                    ReviewDueDate = new DateOnly(2026, 1, 27),
+                    FinalDueDate = new DateOnly(2026, 2, 3),
+                    ClassSection = section1
+                };
+                Assignment assignment2 = new Assignment
+                {
+                    AssignmentName = "Lab02-Branching",
+                    DraftDueDate = new DateOnly(2026, 2, 3),
+                    ReviewDueDate = new DateOnly(2026, 2, 10),
+                    FinalDueDate = new DateOnly(2026, 2, 17),
+                    ClassSection = section1
+                };
+                Assignment assignment3 = new Assignment
+                {
+                    AssignmentName = "Lab03-MVC",
+                    DraftDueDate = new DateOnly(2026, 2, 10),
+                    ReviewDueDate = new DateOnly(2026, 2, 17),
+                    FinalDueDate = new DateOnly(2026, 2, 24),
+                    ClassSection = section2
+                };
+                context.Assignments.Add(assignment1);
+                context.Assignments.Add(assignment2);
+                context.Assignments.Add(assignment3);
+                context.SaveChanges();
+
+                // Create Submission objects
+                Submission submission1 = new Submission
+                {
+                    CodeUrl = "https://github.com/ghopper/lab01-variables",
+                    Version = "A",
+                    SubmissionDate = new DateTime(2026, 1, 26),
+                    Student = student1,
+                    Assignment = assignment1
+                };
+                Submission submission2 = new Submission
+                {
+                    CodeUrl = "https://github.com/aturing/lab02-branching",
+                    Version = "B",
+                    SubmissionDate = new DateTime(2026, 2, 9),
+                    Student = student2,
+                    Assignment = assignment2
+                };
+                Submission submission3 = new Submission
+                {
+                    CodeUrl = "https://github.com/mhamilton/lab03-mvc",
+                    Version = null,
+                    SubmissionDate = new DateTime(2026, 2, 16),
+                    Student = student3,
+                    Assignment = assignment3
+                };
+                context.Submissions.Add(submission1);
+                context.Submissions.Add(submission2);
+                context.Submissions.Add(submission3);
+                context.SaveChanges();  // Save submissions to get their Ids
+
+                // Create Review objects
+                Review review1 = new Review
                 {
                     Reviewer = reviewer1,
-                    ReviewDate = new DateOnly(2026, 2, 10),
+                    ReviewDate = new DateOnly(2026, 1, 28),
                     Comments = "Great code structure and clear variable names. " +
                     "Consider adding more comments to explain the algorithm logic. " +
                     "Overall well done!",
-                    ReviewUrl = "https://github.com/example/pull/123#discussion_r12345",
-                    Submission = dummySubmission
+                    ReviewUrl = "https://github.com/ghopper/lab01-variables/pull/1",
+                    Submission = submission1
                 };
-                context.Reviews.Add(review);  // queues up a review to be added to the DB
-
                 Review review2 = new Review
                 {
                     Reviewer = reviewer2,
-                    ReviewDate = new DateOnly(2025, 6, 3),
+                    ReviewDate = new DateOnly(2026, 2, 11),
                     Comments = "Code works correctly and handles edge cases well. " +
                     "Nice use of helper functions to break down the problem. " +
                     "Minor: could optimize the loop in line 42.",
-                    ReviewUrl = "https://github.com/example/pull/124#discussion_r12346",
-                    Submission = dummySubmission
+                    ReviewUrl = "https://github.com/aturing/lab02-branching/pull/2",
+                    Submission = submission2
                 };
-                context.Reviews.Add(review2);  // queues up the second review to be added to the DB
+                context.Reviews.Add(review1);
+                context.Reviews.Add(review2);
 
                 context.SaveChanges();  // Save all reviews to the database
             }

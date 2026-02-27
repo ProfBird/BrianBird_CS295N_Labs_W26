@@ -21,6 +21,7 @@ namespace CodeReviews.Controllers
             return View();
         }
 
+        // Lists all the reviews
         public IActionResult List()
         {
             var reviews = context.Reviews
@@ -28,6 +29,15 @@ namespace CodeReviews.Controllers
                 .Include(r => r.Submission)
                 .ToList();
             return View(reviews);
+        }
+
+        public IActionResult Submissions()
+        {
+            var submissions = context.Submissions
+                .Include(s => s.Student)
+                .Include(s => s.Assignment)
+                .ToList();
+            return View(submissions);
         }
 
         public IActionResult Filter(string reviewer, string date)
@@ -42,20 +52,55 @@ namespace CodeReviews.Controllers
             return View("List", reviews);
         }
 
+        // Open the review entry form
         [HttpGet]
-        public IActionResult Review()
+        public IActionResult Review(int? id)
         {
-            return View();
+            var review = new Review();
+            
+            if (id.HasValue)
+            {
+                var submission = context.Submissions
+                    .Include(s => s.Student)
+                    .Include(s => s.Assignment)
+                    .FirstOrDefault(s => s.SubmissionId == id.Value);
+                
+                if (submission != null)
+                {
+                    review.Submission = submission;
+                }
+            }
+            
+            return View(review);
         }
 
         [HttpPost]
-        public IActionResult Review(Review review)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Review(int submissionId, Review review)
         {
-            review.ReviewDate = DateOnly.FromDateTime(DateTime.Now);
+            var submission = await context.Submissions
+                .Include(s => s.Student)
+                .Include(s => s.Assignment)
+                .ThenInclude(a => a.ClassSection)
+                .ThenInclude(sec => sec.Course)
+                .Include(s => s.Assignment)
+                .ThenInclude(a => a.ClassSection)
+                .ThenInclude(sec => sec.Instructor)
+                .FirstOrDefaultAsync(s => s.SubmissionId == submissionId);
 
-            // Use the seeded dummy submission
-            var dummySubmission = context.Submissions.FirstOrDefault();
-            review.Submission = dummySubmission;
+            if (submission is null)
+            {
+                return NotFound();
+            }
+            review.Submission = submission;
+            
+            ModelState.Clear();
+            TryValidateModel(review);
+            if (!ModelState.IsValid)
+            {
+                return View(review);
+            }
+            review.ReviewDate = DateOnly.FromDateTime(DateTime.Now);
 
             context.Reviews.Add(review);
             context.SaveChanges();

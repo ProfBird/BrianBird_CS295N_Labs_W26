@@ -5,25 +5,66 @@
 <div class="text-center">
     <h1>Submit a Code Review</h1>
 </div>
-<form asp-action="Review" method="post">
+
+@if (Model.Submission != null)
+{
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3>Submission Details</h3>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Student:</dt>
+                <dd class="col-sm-9">@Model.Submission.Student?.Name</dd>
+                
+                <dt class="col-sm-3">Assignment:</dt>
+                <dd class="col-sm-9">@Model.Submission.Assignment?.AssignmentName</dd>
+                
+                <dt class="col-sm-3">Version:</dt>
+                <dd class="col-sm-9">@(Model.Submission.Version ?? "N/A")</dd>
+                
+                <dt class="col-sm-3">Submission Date:</dt>
+                <dd class="col-sm-9">@Model.Submission.SubmissionDate.ToString("d")</dd>
+                
+                <dt class="col-sm-3">Code URL:</dt>
+                <dd class="col-sm-9">
+                    @if (!string.IsNullOrWhiteSpace(Model.Submission.CodeUrl))
+                    {
+                        var url = Model.Submission.CodeUrl;
+                        if (!url.StartsWith("http://") && !url.StartsWith("https://"))
+                        {
+                            url = "https://" + url;
+                        }
+                        <a href="@url" target="_blank">@Model.Submission.CodeUrl</a>
+                    }
+                </dd>
+            </dl>
+        </div>
+    </div>
+}
+
+<form asp-action="Review" asp-route-submissionId="@Model.Submission.SubmissionId" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="mb-3">
         <label class="form-label">Reviewer Name</label>
-        <input asp-for="Reviewer.Name" class="form-control" />
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Submission Code URL</label>
-        <input asp-for="Submission.CodeUrl" class="form-control" />
+        <input asp-for="Reviewer.Name" class="form-control"/>
+        <span asp-validation-for="Reviewer.Name" class="text-danger"></span>
     </div>
     <div class="mb-3">
         <label class="form-label">Review Link</label>
-        <input asp-for="ReviewUrl" class="form-control" />
+        <input asp-for="ReviewUrl" class="form-control" value="https://"/>
+        <span asp-validation-for="ReviewUrl" class="text-danger"></span>
     </div>
     <div class="mb-3">
         <label class="form-label">Comments</label>
         <textarea asp-for="Comments" class="form-control" rows="5"></textarea>
+        <span asp-validation-for="Comments" class="text-danger"></span>
     </div>
     <button type="submit" class="btn btn-primary">Submit Review</button>
 </form>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
 <div class="mt-3">
     <a asp-action="List">Back to Reviews</a>
 </div>
