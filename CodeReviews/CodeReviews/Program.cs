@@ -1,6 +1,7 @@
 #undef SQLITE  // To use SQLite, change #undef to #define. MySQL is the default.
 using CodeReviews.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,8 @@ var connectionString = $"{baseConnectionString}userid={user};password={password}
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySQL(connectionString));
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<CodeReviewsContext>();
 #endif
 
 var app = builder.Build();
