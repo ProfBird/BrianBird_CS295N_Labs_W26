@@ -10,9 +10,6 @@ namespace CodeReviews.Models
         [Required]
         public Assignment Assignment { get; set; }
         
-        // Assignment version (if there aren't multiple versions, leave null)
-        public string? Version { get; set; } // Ex: A, B, C
-        
         // Student whose assignment is being submitted
         [Required]
         public AppUser Student { get; set; }
@@ -20,6 +17,9 @@ namespace CodeReviews.Models
         // Today's date is automatically added in the controller
         [Required]
         public DateTime SubmissionDate { get; set; }
+        
+        // Version of the assignment being submitted
+        public string? Version { get; set; }
         
         // Address of the code. Could be a Git repo.
         [Required]

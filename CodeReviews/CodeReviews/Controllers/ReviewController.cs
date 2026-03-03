@@ -36,6 +36,7 @@ namespace CodeReviews.Controllers
             var submissions = context.Submissions
                 .Include(s => s.Student)
                 .Include(s => s.Assignment)
+                .ThenInclude(a => a.Versions)
                 .ToList();
             return View(submissions);
         }
@@ -47,7 +48,7 @@ namespace CodeReviews.Controllers
                 .Include(r => r.Submission)
                 .ToList()
                 .Where(r => reviewer == null || r.Reviewer.Name == reviewer)
-                .Where(r => date == null || r.ReviewDate == DateOnly.Parse(date))
+                .Where(r => date == null || r.ReviewDate.Date == DateTime.Parse(date).Date)
                 .ToList();
             return View("List", reviews);
         }
@@ -100,7 +101,7 @@ namespace CodeReviews.Controllers
             {
                 return View(review);
             }
-            review.ReviewDate = DateOnly.FromDateTime(DateTime.Now);
+            review.ReviewDate = DateTime.Now;
 
             context.Reviews.Add(review);
             context.SaveChanges();

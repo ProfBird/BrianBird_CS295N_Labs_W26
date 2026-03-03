@@ -75,26 +75,40 @@ namespace CodeReviews.Data
                 Assignment assignment1 = new Assignment
                 {
                     AssignmentName = "Lab01 Variables",
-                    DraftDueDate = new DateOnly(2026, 1, 20),
-                    ReviewDueDate = new DateOnly(2026, 1, 27),
-                    FinalDueDate = new DateOnly(2026, 2, 3),
-                    ClassSection = section1
+                    DraftDueDate = new DateTime(2026, 1, 20),
+                    ReviewDueDate = new DateTime(2026, 1, 27),
+                    FinalDueDate = new DateTime(2026, 2, 3),
+                    ClassSection = section1,
+                    Versions = new List<AssignmentVersion>
+                    {
+                        new AssignmentVersion { VersionName = "A", Description = "Console version", InstructionsLink = "https://example.com/lab01a" },
+                        new AssignmentVersion { VersionName = "B", Description = "GUI version", InstructionsLink = "https://example.com/lab01b" }
+                    }
                 };
                 Assignment assignment2 = new Assignment
                 {
                     AssignmentName = "Lab02 Branching",
-                    DraftDueDate = new DateOnly(2026, 2, 3),
-                    ReviewDueDate = new DateOnly(2026, 2, 10),
-                    FinalDueDate = new DateOnly(2026, 2, 17),
-                    ClassSection = section1
+                    DraftDueDate = new DateTime(2026, 2, 3),
+                    ReviewDueDate = new DateTime(2026, 2, 10),
+                    FinalDueDate = new DateTime(2026, 2, 17),
+                    ClassSection = section1,
+                    Versions = new List<AssignmentVersion>
+                    {
+                        new AssignmentVersion { VersionName = "A", Description = "If-else logic", InstructionsLink = "https://example.com/lab02a" },
+                        new AssignmentVersion { VersionName = "B", Description = "Switch-case logic", InstructionsLink = "https://example.com/lab02b" }
+                    }
                 };
                 Assignment assignment3 = new Assignment
                 {
                     AssignmentName = "Lab03 MVC",
-                    DraftDueDate = new DateOnly(2026, 2, 10),
-                    ReviewDueDate = new DateOnly(2026, 2, 17),
-                    FinalDueDate = new DateOnly(2026, 2, 24),
-                    ClassSection = section2
+                    DraftDueDate = new DateTime(2026, 2, 10),
+                    ReviewDueDate = new DateTime(2026, 2, 17),
+                    FinalDueDate = new DateTime(2026, 2, 24),
+                    ClassSection = section2,
+                    Versions = new List<AssignmentVersion>
+                    {
+                        new AssignmentVersion { VersionName = "Standard", Description = "Basic MVC pattern", InstructionsLink = "https://example.com/lab03" }
+                    }
                 };
                 context.Assignments.Add(assignment1);
                 context.Assignments.Add(assignment2);
@@ -135,7 +149,7 @@ namespace CodeReviews.Data
                 Review review1 = new Review
                 {
                     Reviewer = reviewer1,
-                    ReviewDate = new DateOnly(2026, 1, 28),
+                    ReviewDate = new DateTime(2026, 1, 28),
                     Comments = "Great code structure and clear variable names. " +
                     "Consider adding more comments to explain the algorithm logic. " +
                     "Overall well done!",
@@ -145,7 +159,7 @@ namespace CodeReviews.Data
                 Review review2 = new Review
                 {
                     Reviewer = reviewer2,
-                    ReviewDate = new DateOnly(2026, 2, 11),
+                    ReviewDate = new DateTime(2026, 2, 11),
                     Comments = "Code works correctly and handles edge cases well. " +
                     "Nice use of helper functions to break down the problem. " +
                     "Minor: could optimize the loop in line 42.",

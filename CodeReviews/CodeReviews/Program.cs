@@ -1,4 +1,4 @@
-#define SQLITE  // To use SQLite, change #undef to #define. MySQL is the default.
+#undef SQLITE  // To use SQLite, change #undef to #define. MySQL is the default.
 using CodeReviews.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +18,7 @@ var password = builder.Configuration["DbPassword"];
 var connectionString = $"{baseConnectionString}userid={user};password={password};";
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+    options.UseMySQL(connectionString));
 #endif
 
 var app = builder.Build();

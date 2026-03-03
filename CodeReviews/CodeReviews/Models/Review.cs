@@ -15,7 +15,7 @@ namespace CodeReviews.Models
         public AppUser Reviewer { get; set; }
         
         // Today's date is automatically added in the controller
-        public DateOnly ReviewDate { get; set; }
+        public DateTime ReviewDate { get; set; }
         
         // Review itself, or comments about the review at ReviewURL
         [StringLength(1000)]
