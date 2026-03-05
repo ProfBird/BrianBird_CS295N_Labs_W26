@@ -5,14 +5,13 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CodeReviews.Data
 {
-    public class AppDbContext : IdentityDbContext
+    public class AppDbContext : IdentityDbContext<AppUser>
     {
         // constructor just calls the base class constructor
         public AppDbContext(
            DbContextOptions<AppDbContext> options) : base(options) { }
 
         // one DbSet for each domain model class
-        public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Section> Sections { get; set; }
         public DbSet<Assignment> Assignments { get; set; }

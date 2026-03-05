@@ -1,14 +1,18 @@
 ﻿using CodeReviews.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace CodeReviews.Data
 {
     public class SeedData
     {
-        public static void Seed(AppDbContext context)
+        public static void Seed(AppDbContext context, IServiceProvider provider)
         {
             if (!context.Reviews.Any())  // this is to prevent adding duplicate data
             {
+                var userManager = provider.GetRequiredService<UserManager<AppUser>>();
+                const string SECRET_PASSWORD = "Secret!123";
                 // Create User objects
+
                 AppUser reviewer1 = new AppUser { Name = "Ada Lovelace" };
                 AppUser reviewer2 = new AppUser { Name = "Charles Babage" };
                 AppUser student1 = new AppUser { Name = "Grace Hopper" };
@@ -16,16 +20,16 @@ namespace CodeReviews.Data
                 AppUser student3 = new AppUser { Name = "Margaret Hamilton" };
                 AppUser instructor1 = new AppUser { Name = "Donald Knuth" };
                 AppUser instructor2 = new AppUser { Name = "Barbara Liskov" };
-                
-                // Queue up user objects to be saved to the DB
-                context.AppUsers.Add(reviewer1);
-                context.AppUsers.Add(reviewer2);
-                context.AppUsers.Add(student1);
-                context.AppUsers.Add(student2);
-                context.AppUsers.Add(student3);
-                context.AppUsers.Add(instructor1);
-                context.AppUsers.Add(instructor2);
-                context.SaveChanges();  // Saving adds Id to User objects
+
+                // Create users
+                // TODO: Check result after creating each user to see if it succeedded
+                var result = userManager.CreateAsync(reviewer1, SECRET_PASSWORD);
+                result = userManager.CreateAsync(reviewer2, SECRET_PASSWORD);
+                result = userManager.CreateAsync(student1, SECRET_PASSWORD);
+                result = userManager.CreateAsync(student2, SECRET_PASSWORD);
+                result = userManager.CreateAsync(student3, SECRET_PASSWORD);
+                result = userManager.CreateAsync(instructor1, SECRET_PASSWORD);
+                result = userManager.CreateAsync(instructor2, SECRET_PASSWORD);
 
                 // Create Course objects
                 Course course1 = new Course
@@ -80,10 +84,10 @@ namespace CodeReviews.Data
                     FinalDueDate = new DateTime(2026, 2, 3),
                     ClassSection = section1,
                     Versions = new List<AssignmentVersion>
-                    {
-                        new AssignmentVersion { VersionName = "A", Description = "Console version", InstructionsLink = "https://example.com/lab01a" },
-                        new AssignmentVersion { VersionName = "B", Description = "GUI version", InstructionsLink = "https://example.com/lab01b" }
-                    }
+        {
+            new AssignmentVersion { VersionName = "A", Description = "Console version", InstructionsLink = "https://example.com/lab01a" },
+            new AssignmentVersion { VersionName = "B", Description = "GUI version", InstructionsLink = "https://example.com/lab01b" }
+        }
                 };
                 Assignment assignment2 = new Assignment
                 {
@@ -93,10 +97,10 @@ namespace CodeReviews.Data
                     FinalDueDate = new DateTime(2026, 2, 17),
                     ClassSection = section1,
                     Versions = new List<AssignmentVersion>
-                    {
-                        new AssignmentVersion { VersionName = "A", Description = "If-else logic", InstructionsLink = "https://example.com/lab02a" },
-                        new AssignmentVersion { VersionName = "B", Description = "Switch-case logic", InstructionsLink = "https://example.com/lab02b" }
-                    }
+        {
+            new AssignmentVersion { VersionName = "A", Description = "If-else logic", InstructionsLink = "https://example.com/lab02a" },
+            new AssignmentVersion { VersionName = "B", Description = "Switch-case logic", InstructionsLink = "https://example.com/lab02b" }
+        }
                 };
                 Assignment assignment3 = new Assignment
                 {
@@ -106,9 +110,9 @@ namespace CodeReviews.Data
                     FinalDueDate = new DateTime(2026, 2, 24),
                     ClassSection = section2,
                     Versions = new List<AssignmentVersion>
-                    {
-                        new AssignmentVersion { VersionName = "Standard", Description = "Basic MVC pattern", InstructionsLink = "https://example.com/lab03" }
-                    }
+        {
+            new AssignmentVersion { VersionName = "Standard", Description = "Basic MVC pattern", InstructionsLink = "https://example.com/lab03" }
+        }
                 };
                 context.Assignments.Add(assignment1);
                 context.Assignments.Add(assignment2);
@@ -171,6 +175,8 @@ namespace CodeReviews.Data
 
                 context.SaveChanges();  // Save all reviews to the database
             }
+
         }
+
     }
 }

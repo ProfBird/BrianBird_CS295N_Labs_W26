@@ -7,7 +7,7 @@ using MySql.EntityFrameworkCore.Metadata;
 namespace CodeReviews.Migrations
 {
     /// <inheritdoc />
-    public partial class MySql_Initial : Migration
+    public partial class MySQL_Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -35,9 +35,7 @@ namespace CodeReviews.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "varchar(255)", nullable: false),
-                    Discriminator = table.Column<string>(type: "varchar(13)", maxLength: 13, nullable: false),
-                    AppUserId = table.Column<int>(type: "int", nullable: true),
-                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true),
+                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
                     UserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),

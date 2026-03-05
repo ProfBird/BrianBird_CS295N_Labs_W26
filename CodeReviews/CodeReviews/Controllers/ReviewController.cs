@@ -1,5 +1,6 @@
 ﻿using CodeReviews.Data;
 using CodeReviews.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,12 +9,14 @@ namespace CodeReviews.Controllers
     public class ReviewController : Controller
     {
         AppDbContext context;
+        UserManager<AppUser> userManager;
 
         // constructor
-        public ReviewController(AppDbContext c)
+        public ReviewController(AppDbContext c, UserManager<AppUser> u)
 
         {
             context = c;
+            userManager = u;
         }
 
         public IActionResult Index()
@@ -94,7 +97,9 @@ namespace CodeReviews.Controllers
                 return NotFound();
             }
             review.Submission = submission;
-            
+            // TODO: Deal with possible nulls
+            review.Reviewer = await userManager.GetUserAsync(User);
+
             ModelState.Clear();
             TryValidateModel(review);
             if (!ModelState.IsValid)
