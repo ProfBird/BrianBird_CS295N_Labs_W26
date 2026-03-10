@@ -1,4 +1,4 @@
-﻿#define SEED_TEST_DATA  // To add test data, change #undef to #define.
+﻿#define SEED_TEST_DATA // To add test data, change #undef to #define.
 
 using CodeReviews.Models;
 using Microsoft.AspNetCore.Identity;
@@ -27,7 +27,7 @@ namespace CodeReviews.Data
                     roleManager.CreateAsync(new IdentityRole(roleName)).Wait();
                 }
             }
-            
+
             // create default admin user if it doesn't exist
             var adminPassword = config["SeedData:AdminPassword"];
             var adminUserName = config["SeedData:AdminUserName"]; // FYI, this is an email address
@@ -61,7 +61,7 @@ namespace CodeReviews.Data
 
             /*** This seed data is just for testing. Disable it for production ***/
 #if SEED_TEST_DATA
-            if (!context.Reviews.Any())  // this is to prevent adding duplicate data
+            if (!context.Reviews.Any()) // this is to prevent adding duplicate data
             {
                 const string SECRET_PASSWORD = "Secret!123";
                 // Create User objects
@@ -137,10 +137,18 @@ namespace CodeReviews.Data
                     FinalDueDate = new DateTime(2026, 2, 3),
                     ClassSection = section1,
                     Versions = new List<AssignmentVersion>
-        {
-            new AssignmentVersion { VersionName = "A", Description = "Console version", InstructionsLink = "https://example.com/lab01a" },
-            new AssignmentVersion { VersionName = "B", Description = "GUI version", InstructionsLink = "https://example.com/lab01b" }
-        }
+                    {
+                        new AssignmentVersion
+                        {
+                            VersionName = "A", Description = "Console version",
+                            InstructionsLink = "https://example.com/lab01a"
+                        },
+                        new AssignmentVersion
+                        {
+                            VersionName = "B", Description = "GUI version",
+                            InstructionsLink = "https://example.com/lab01b"
+                        }
+                    }
                 };
                 Assignment assignment2 = new Assignment
                 {
@@ -150,10 +158,18 @@ namespace CodeReviews.Data
                     FinalDueDate = new DateTime(2026, 2, 17),
                     ClassSection = section1,
                     Versions = new List<AssignmentVersion>
-        {
-            new AssignmentVersion { VersionName = "A", Description = "If-else logic", InstructionsLink = "https://example.com/lab02a" },
-            new AssignmentVersion { VersionName = "B", Description = "Switch-case logic", InstructionsLink = "https://example.com/lab02b" }
-        }
+                    {
+                        new AssignmentVersion
+                        {
+                            VersionName = "A", Description = "If-else logic",
+                            InstructionsLink = "https://example.com/lab02a"
+                        },
+                        new AssignmentVersion
+                        {
+                            VersionName = "B", Description = "Switch-case logic",
+                            InstructionsLink = "https://example.com/lab02b"
+                        }
+                    }
                 };
                 Assignment assignment3 = new Assignment
                 {
@@ -163,9 +179,13 @@ namespace CodeReviews.Data
                     FinalDueDate = new DateTime(2026, 2, 24),
                     ClassSection = section2,
                     Versions = new List<AssignmentVersion>
-        {
-            new AssignmentVersion { VersionName = "Standard", Description = "Basic MVC pattern", InstructionsLink = "https://example.com/lab03" }
-        }
+                    {
+                        new AssignmentVersion
+                        {
+                            VersionName = "Standard", Description = "Basic MVC pattern",
+                            InstructionsLink = "https://example.com/lab03"
+                        }
+                    }
                 };
                 context.Assignments.Add(assignment1);
                 context.Assignments.Add(assignment2);
@@ -200,7 +220,7 @@ namespace CodeReviews.Data
                 context.Submissions.Add(submission1);
                 context.Submissions.Add(submission2);
                 context.Submissions.Add(submission3);
-                context.SaveChanges();  // Save submissions to get their Ids
+                context.SaveChanges(); // Save submissions to get their Ids
 
                 // Create Review objects
                 Review review1 = new Review
@@ -208,8 +228,8 @@ namespace CodeReviews.Data
                     Reviewer = reviewer1,
                     ReviewDate = new DateTime(2026, 1, 28),
                     Comments = "Great code structure and clear variable names. " +
-                    "Consider adding more comments to explain the algorithm logic. " +
-                    "Overall well done!",
+                               "Consider adding more comments to explain the algorithm logic. " +
+                               "Overall well done!",
                     ReviewUrl = "https://github.com/ghopper/lab01-variables/pull/1",
                     Submission = submission1
                 };
@@ -218,15 +238,15 @@ namespace CodeReviews.Data
                     Reviewer = reviewer2,
                     ReviewDate = new DateTime(2026, 2, 11),
                     Comments = "Code works correctly and handles edge cases well. " +
-                    "Nice use of helper functions to break down the problem. " +
-                    "Minor: could optimize the loop in line 42.",
+                               "Nice use of helper functions to break down the problem. " +
+                               "Minor: could optimize the loop in line 42.",
                     ReviewUrl = "https://github.com/aturing/lab02-branching/pull/2",
                     Submission = submission2
                 };
                 context.Reviews.Add(review1);
                 context.Reviews.Add(review2);
 
-                context.SaveChanges();  // Save all reviews to the database
+                context.SaveChanges(); // Save all reviews to the database
             }
 #endif
         }
