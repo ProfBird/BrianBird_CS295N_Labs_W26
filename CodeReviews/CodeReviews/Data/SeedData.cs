@@ -1,4 +1,6 @@
-﻿using CodeReviews.Models;
+﻿#define SEED_TEST_DATA  // To add test data, change #undef to #define.
+
+using CodeReviews.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
@@ -13,6 +15,7 @@ namespace CodeReviews.Data
             var userManager = provider.GetRequiredService<UserManager<AppUser>>();
 
             // Define roles
+            // TODO: Move role names to a static class that can be used in controllers too.
             const string ADMIN_ROLE = "Admin", INSTRUCTOR_ROLE = "Instructor", STUDENT_ROLE = "Student";
             string[] roleNames = { ADMIN_ROLE, INSTRUCTOR_ROLE, STUDENT_ROLE };
 
@@ -25,31 +28,39 @@ namespace CodeReviews.Data
                 }
             }
             
+            // create default admin user if it doesn't exist
             var adminPassword = config["SeedData:AdminPassword"];
-            var adminUserName = config["SeedData:AdminUserName"];
-            if (string.IsNullOrEmpty(adminUserName) || string.IsNullOrEmpty(adminPassword))
-                throw new InvalidOperationException("Admin cerdentials not configured in user secrets.");
-
-            var adminUser = new AppUser { Name = adminUserName, UserName = "admin@example.com", Email = "admin@example.com", EmailConfirmed = true};
-            var result = userManager.CreateAsync(adminUser, adminPassword).Result;
-            if (!result.Succeeded)
+            var adminUserName = config["SeedData:AdminUserName"]; // FYI, this is an email address
+            if (!context.Users.Any(u => u.UserName == adminUserName))
             {
-                throw new InvalidOperationException(
-                    $"Failed to create user {adminUser.UserName}: " +
-                    string.Join(", ", result.Errors.Select(e => e.Description)));
+                {
+                    if (string.IsNullOrEmpty(adminUserName) || string.IsNullOrEmpty(adminPassword))
+                        throw new InvalidOperationException("Admin cerdentials not configured in user secrets.");
+
+                    // Note: By default Identity uses the user's email address as a UserName
+                    var adminUser = new AppUser
+                        { Name = "Admin", UserName = adminUserName, Email = adminUserName, EmailConfirmed = true };
+                    var result = userManager.CreateAsync(adminUser, adminPassword).Result;
+                    if (!result.Succeeded)
+                    {
+                        throw new InvalidOperationException(
+                            $"Failed to create user {adminUser.UserName}: " +
+                            string.Join(", ", result.Errors.Select(e => e.Description)));
+                    }
+
+                    // Assign role
+                    var roleResult = userManager.AddToRoleAsync(adminUser, ADMIN_ROLE).Result;
+                    if (!roleResult.Succeeded)
+                    {
+                        throw new InvalidOperationException(
+                            $"Failed to add role '{ADMIN_ROLE}' to {adminUser.UserName}: " +
+                            string.Join(", ", roleResult.Errors.Select(e => e.Description)));
+                    }
+                }
             }
 
-
-            // Assign role
-            var roleResult = userManager.AddToRoleAsync(adminUser, ADMIN_ROLE).Result;
-            if (!roleResult.Succeeded)
-            {
-                throw new InvalidOperationException(
-                    $"Failed to add role '{ADMIN_ROLE}' to {adminUser.UserName}: " +
-                    string.Join(", ", roleResult.Errors.Select(e => e.Description)));
-            }
-            
             /*** This seed data is just for testing. Disable it for production ***/
+#if SEED_TEST_DATA
             if (!context.Reviews.Any())  // this is to prevent adding duplicate data
             {
                 const string SECRET_PASSWORD = "Secret!123";
@@ -217,8 +228,7 @@ namespace CodeReviews.Data
 
                 context.SaveChanges();  // Save all reviews to the database
             }
-
+#endif
         }
-
     }
 }
