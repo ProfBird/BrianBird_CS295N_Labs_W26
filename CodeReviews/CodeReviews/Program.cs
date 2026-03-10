@@ -1,4 +1,4 @@
-#undef SQLITE  // To use SQLite, change #undef to #define. MySQL is the default.
+#define SQLITE  // To use SQLite, change #undef to #define. MySQL is the default.
 using CodeReviews.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
@@ -26,6 +26,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Configure Identity - applies to both SQLite and MySQL
 builder.Services.AddDefaultIdentity<AppUser>(options => 
     options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>();
 
 var app = builder.Build();
@@ -54,9 +55,9 @@ app.MapControllerRoute(
 
 using (var scope = app.Services.CreateScope())
 {
-    var dbContext = scope.ServiceProvider
-                         .GetRequiredService<AppDbContext>();
-    SeedData.Seed(dbContext, scope.ServiceProvider);
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+    SeedData.Seed(dbContext, scope.ServiceProvider, config);
 }
 
 app.Run();

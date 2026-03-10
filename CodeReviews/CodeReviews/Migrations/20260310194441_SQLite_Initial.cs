@@ -1,87 +1,80 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using MySql.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
 namespace CodeReviews.Migrations
 {
     /// <inheritdoc />
-    public partial class MySQL_Initial : Migration
+    public partial class SQLite_Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterDatabase()
-                .Annotation("MySQL:Charset", "utf8mb4");
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(255)", nullable: false),
-                    Name = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "longtext", nullable: true)
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoles", x => x.Id);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(255)", nullable: false),
-                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
-                    UserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    PasswordHash = table.Column<string>(type: "longtext", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "longtext", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "longtext", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "longtext", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetime", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "INTEGER", nullable: false),
+                    PasswordHash = table.Column<string>(type: "TEXT", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "TEXT", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "TEXT", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "TEXT", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "INTEGER", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "TEXT", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Courses",
                 columns: table => new
                 {
-                    CourseId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    CoursePrefix = table.Column<string>(type: "longtext", nullable: false),
-                    CourseNumber = table.Column<string>(type: "longtext", nullable: false),
-                    CourseName = table.Column<string>(type: "longtext", nullable: false)
+                    CourseId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    CoursePrefix = table.Column<string>(type: "TEXT", nullable: false),
+                    CourseNumber = table.Column<string>(type: "TEXT", nullable: false),
+                    CourseName = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Courses", x => x.CourseId);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    RoleId = table.Column<string>(type: "varchar(255)", nullable: false),
-                    ClaimType = table.Column<string>(type: "longtext", nullable: true),
-                    ClaimValue = table.Column<string>(type: "longtext", nullable: true)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    RoleId = table.Column<string>(type: "TEXT", nullable: false),
+                    ClaimType = table.Column<string>(type: "TEXT", nullable: true),
+                    ClaimValue = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -92,18 +85,17 @@ namespace CodeReviews.Migrations
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    UserId = table.Column<string>(type: "varchar(255)", nullable: false),
-                    ClaimType = table.Column<string>(type: "longtext", nullable: true),
-                    ClaimValue = table.Column<string>(type: "longtext", nullable: true)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    UserId = table.Column<string>(type: "TEXT", nullable: false),
+                    ClaimType = table.Column<string>(type: "TEXT", nullable: true),
+                    ClaimValue = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -114,17 +106,16 @@ namespace CodeReviews.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false),
-                    ProviderKey = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false),
-                    ProviderDisplayName = table.Column<string>(type: "longtext", nullable: true),
-                    UserId = table.Column<string>(type: "varchar(255)", nullable: false)
+                    LoginProvider = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
+                    ProviderKey = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "TEXT", nullable: true),
+                    UserId = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -135,15 +126,14 @@ namespace CodeReviews.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "varchar(255)", nullable: false),
-                    RoleId = table.Column<string>(type: "varchar(255)", nullable: false)
+                    UserId = table.Column<string>(type: "TEXT", nullable: false),
+                    RoleId = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -160,17 +150,16 @@ namespace CodeReviews.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "varchar(255)", nullable: false),
-                    LoginProvider = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false),
-                    Name = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false),
-                    Value = table.Column<string>(type: "longtext", nullable: true)
+                    UserId = table.Column<string>(type: "TEXT", nullable: false),
+                    LoginProvider = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
+                    Value = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -181,23 +170,22 @@ namespace CodeReviews.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Sections",
                 columns: table => new
                 {
-                    SectionId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    CourseId = table.Column<int>(type: "int", nullable: false),
-                    SectionNumber = table.Column<int>(type: "int", nullable: false),
-                    Day = table.Column<string>(type: "longtext", nullable: true),
-                    StartTime = table.Column<string>(type: "longtext", nullable: true),
-                    Modality = table.Column<string>(type: "longtext", nullable: true),
-                    Term = table.Column<string>(type: "longtext", nullable: false),
-                    Year = table.Column<int>(type: "int", nullable: false),
-                    InstructorId = table.Column<string>(type: "varchar(255)", nullable: false)
+                    SectionId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    CourseId = table.Column<int>(type: "INTEGER", nullable: false),
+                    SectionNumber = table.Column<int>(type: "INTEGER", nullable: false),
+                    Day = table.Column<string>(type: "TEXT", nullable: true),
+                    StartTime = table.Column<string>(type: "TEXT", nullable: true),
+                    Modality = table.Column<string>(type: "TEXT", nullable: true),
+                    Term = table.Column<string>(type: "TEXT", nullable: false),
+                    Year = table.Column<int>(type: "INTEGER", nullable: false),
+                    InstructorId = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -214,20 +202,19 @@ namespace CodeReviews.Migrations
                         principalTable: "Courses",
                         principalColumn: "CourseId",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Assignments",
                 columns: table => new
                 {
-                    AssignmentId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    ClassSectionSectionId = table.Column<int>(type: "int", nullable: false),
-                    AssignmentName = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
-                    DraftDueDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    ReviewDueDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    FinalDueDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    AssignmentId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ClassSectionSectionId = table.Column<int>(type: "INTEGER", nullable: false),
+                    AssignmentName = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    DraftDueDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    ReviewDueDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    FinalDueDate = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -238,19 +225,18 @@ namespace CodeReviews.Migrations
                         principalTable: "Sections",
                         principalColumn: "SectionId",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AssignmentVersions",
                 columns: table => new
                 {
-                    AssignmentVersionId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    VersionName = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
-                    InstructionsLink = table.Column<string>(type: "longtext", nullable: true),
-                    Description = table.Column<string>(type: "longtext", nullable: true),
-                    AssignmentId = table.Column<int>(type: "int", nullable: true)
+                    AssignmentVersionId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    VersionName = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    InstructionsLink = table.Column<string>(type: "TEXT", nullable: true),
+                    Description = table.Column<string>(type: "TEXT", nullable: true),
+                    AssignmentId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -260,20 +246,19 @@ namespace CodeReviews.Migrations
                         column: x => x.AssignmentId,
                         principalTable: "Assignments",
                         principalColumn: "AssignmentId");
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Submissions",
                 columns: table => new
                 {
-                    SubmissionId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    AssignmentId = table.Column<int>(type: "int", nullable: false),
-                    StudentId = table.Column<string>(type: "varchar(255)", nullable: false),
-                    SubmissionDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Version = table.Column<string>(type: "longtext", nullable: true),
-                    CodeUrl = table.Column<string>(type: "longtext", nullable: false)
+                    SubmissionId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    AssignmentId = table.Column<int>(type: "INTEGER", nullable: false),
+                    StudentId = table.Column<string>(type: "TEXT", nullable: false),
+                    SubmissionDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Version = table.Column<string>(type: "TEXT", nullable: true),
+                    CodeUrl = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -290,20 +275,19 @@ namespace CodeReviews.Migrations
                         principalTable: "Assignments",
                         principalColumn: "AssignmentId",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Reviews",
                 columns: table => new
                 {
-                    ReviewId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    SubmissionId = table.Column<int>(type: "int", nullable: false),
-                    ReviewerId = table.Column<string>(type: "varchar(255)", nullable: false),
-                    ReviewDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Comments = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: true),
-                    ReviewUrl = table.Column<string>(type: "longtext", nullable: true)
+                    ReviewId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    SubmissionId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ReviewerId = table.Column<string>(type: "TEXT", nullable: false),
+                    ReviewDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Comments = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: true),
+                    ReviewUrl = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -320,8 +304,7 @@ namespace CodeReviews.Migrations
                         principalTable: "Submissions",
                         principalColumn: "SubmissionId",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

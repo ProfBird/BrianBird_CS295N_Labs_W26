@@ -1,17 +1,20 @@
 ﻿using CodeReviews.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace CodeReviews.Data
 {
     public class SeedData
     {
-        public static void Seed(AppDbContext context, IServiceProvider provider)
+        public static void Seed(AppDbContext context, IServiceProvider provider, IConfiguration config)
         {
             var roleManager = provider.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManager = provider.GetRequiredService<UserManager<AppUser>>();
 
             // Define roles
-            string[] roleNames = { "Admin", "Instructor", "Student" };
+            const string ADMIN_ROLE = "Admin", INSTRUCTOR_ROLE = "Instructor", STUDENT_ROLE = "Student";
+            string[] roleNames = { ADMIN_ROLE, INSTRUCTOR_ROLE, STUDENT_ROLE };
 
             // Create roles if they don't exist
             foreach (var roleName in roleNames)
@@ -21,11 +24,34 @@ namespace CodeReviews.Data
                     roleManager.CreateAsync(new IdentityRole(roleName)).Wait();
                 }
             }
+            
+            var adminPassword = config["SeedData:AdminPassword"];
+            var adminUserName = config["SeedData:AdminUserName"];
+            if (string.IsNullOrEmpty(adminUserName) || string.IsNullOrEmpty(adminPassword))
+                throw new InvalidOperationException("Admin cerdentials not configured in user secrets.");
 
+            var adminUser = new AppUser { Name = adminUserName, UserName = "admin@example.com", Email = "admin@example.com", EmailConfirmed = true};
+            var result = userManager.CreateAsync(adminUser, adminPassword).Result;
+            if (!result.Succeeded)
+            {
+                throw new InvalidOperationException(
+                    $"Failed to create user {adminUser.UserName}: " +
+                    string.Join(", ", result.Errors.Select(e => e.Description)));
+            }
+
+
+            // Assign role
+            var roleResult = userManager.AddToRoleAsync(adminUser, ADMIN_ROLE).Result;
+            if (!roleResult.Succeeded)
+            {
+                throw new InvalidOperationException(
+                    $"Failed to add role '{ADMIN_ROLE}' to {adminUser.UserName}: " +
+                    string.Join(", ", roleResult.Errors.Select(e => e.Description)));
+            }
+            
             /*** This seed data is just for testing. Disable it for production ***/
             if (!context.Reviews.Any())  // this is to prevent adding duplicate data
             {
-                var userManager = provider.GetRequiredService<UserManager<AppUser>>();
                 const string SECRET_PASSWORD = "Secret!123";
                 // Create User objects
 
@@ -39,13 +65,13 @@ namespace CodeReviews.Data
 
                 // Create users
                 // TODO: Check result after creating each user to see if it succeedded
-                var result = userManager.CreateAsync(reviewer1, SECRET_PASSWORD);
-                result = userManager.CreateAsync(reviewer2, SECRET_PASSWORD);
-                result = userManager.CreateAsync(student1, SECRET_PASSWORD);
-                result = userManager.CreateAsync(student2, SECRET_PASSWORD);
-                result = userManager.CreateAsync(student3, SECRET_PASSWORD);
-                result = userManager.CreateAsync(instructor1, SECRET_PASSWORD);
-                result = userManager.CreateAsync(instructor2, SECRET_PASSWORD);
+                var userResult = userManager.CreateAsync(reviewer1, SECRET_PASSWORD);
+                userResult = userManager.CreateAsync(reviewer2, SECRET_PASSWORD);
+                userResult = userManager.CreateAsync(student1, SECRET_PASSWORD);
+                userResult = userManager.CreateAsync(student2, SECRET_PASSWORD);
+                userResult = userManager.CreateAsync(student3, SECRET_PASSWORD);
+                userResult = userManager.CreateAsync(instructor1, SECRET_PASSWORD);
+                userResult = userManager.CreateAsync(instructor2, SECRET_PASSWORD);
 
                 // Create Course objects
                 Course course1 = new Course
