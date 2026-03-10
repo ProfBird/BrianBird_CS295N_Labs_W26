@@ -1,5 +1,6 @@
 ﻿using CodeReviews.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace CodeReviews.Data
 {
@@ -7,6 +8,21 @@ namespace CodeReviews.Data
     {
         public static void Seed(AppDbContext context, IServiceProvider provider)
         {
+            var roleManager = provider.GetRequiredService<RoleManager<IdentityRole>>();
+
+            // Define roles
+            string[] roleNames = { "Admin", "Instructor", "Student" };
+
+            // Create roles if they don't exist
+            foreach (var roleName in roleNames)
+            {
+                if (!context.Roles.Any(r => r.Name == roleName))
+                {
+                    roleManager.CreateAsync(new IdentityRole(roleName)).Wait();
+                }
+            }
+
+            /*** This seed data is just for testing. Disable it for production ***/
             if (!context.Reviews.Any())  // this is to prevent adding duplicate data
             {
                 var userManager = provider.GetRequiredService<UserManager<AppUser>>();
