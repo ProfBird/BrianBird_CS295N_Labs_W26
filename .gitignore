@@ -416,3 +416,12 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# CodeReviews SQLite local database artifacts
+CodeReviews/CodeReviews/CodeReviews.db
+CodeReviews/CodeReviews/CodeReviews.db-shm
+CodeReviews/CodeReviews/CodeReviews.db-wal
+
+# CodeReviews EF Core migrations
+CodeReviews/CodeReviews/Migrations/
+
