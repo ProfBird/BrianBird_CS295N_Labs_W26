@@ -66,13 +66,13 @@ namespace CodeReviews.Data
                 const string SECRET_PASSWORD = "Secret!123";
                 // Create User objects
 
-                AppUser reviewer1 = new AppUser { Name = "Ada Lovelace" };
-                AppUser reviewer2 = new AppUser { Name = "Charles Babage" };
-                AppUser student1 = new AppUser { Name = "Grace Hopper" };
-                AppUser student2 = new AppUser { Name = "Alan Turing" };
-                AppUser student3 = new AppUser { Name = "Margaret Hamilton" };
-                AppUser instructor1 = new AppUser { Name = "Donald Knuth" };
-                AppUser instructor2 = new AppUser { Name = "Barbara Liskov" };
+                AppUser reviewer1 = new AppUser { Name = "Ada Lovelace", UserName = "ada.l@example.com" };
+                AppUser reviewer2 = new AppUser { Name = "Charles Babage", UserName = "charles.b@example.com" };
+                AppUser student1 = new AppUser { Name = "Grace Hopper", UserName = "grace.h@example.com" };
+                AppUser student2 = new AppUser { Name = "Alan Turing", UserName = "alan.t@example.com" };
+                AppUser student3 = new AppUser { Name = "Margaret Hamilton", UserName = "margaret.h@example.com" };
+                AppUser instructor1 = new AppUser { Name = "Donald Knuth", UserName = "donald.k@example.com" };
+                AppUser instructor2 = new AppUser { Name = "Barbara Liskov", UserName = "barbara.l@example.com" };
 
                 // Create users
                 // TODO: Check result after creating each user to see if it succeedded

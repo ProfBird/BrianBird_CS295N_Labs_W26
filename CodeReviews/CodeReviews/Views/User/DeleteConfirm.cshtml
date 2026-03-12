@@ -1,0 +1,35 @@
+@model UserDeleteImpactVM
+@{
+    ViewData["Title"] = " | Confirm Delete User";
+}
+
+<h1>Confirm User Deletion</h1>
+
+<div class="alert alert-warning mt-3">
+    <strong>Warning:</strong> Deleting this user will also delete related data.
+</div>
+
+<div class="mb-3">
+    <div><strong>Name:</strong> @Model.Name</div>
+    <div><strong>Username:</strong> @Model.UserName</div>
+</div>
+
+@if (Model.HasDependencies)
+{
+    <p>This user is currently referenced by:</p>
+    <ul>
+        <li>@Model.SectionsCount section(s) as instructor</li>
+        <li>@Model.SubmissionsCount submission(s) as student</li>
+        <li>@Model.ReviewsCount review(s) as reviewer</li>
+    </ul>
+    <p>Confirming will remove these dependent records before deleting the user.</p>
+}
+else
+{
+    <p>This user has no dependent domain records.</p>
+}
+
+<form method="post" asp-action="ConfirmDelete" asp-route-id="@Model.UserId" class="d-inline">
+    <button type="submit" class="btn btn-danger">Confirm Delete</button>
+</form>
+<a asp-action="Index" class="btn btn-secondary">Cancel</a>
